@@ -167,11 +167,21 @@ class FilmRepoTest {
 		// TODO Auto-generated method stub
 		List<Film> result = filmRepo.top5HighMarginFilms();
 
-		List<Film> result2= filmRepo.getAll();
+		List<Film> temp= filmRepo.getAll();
+		ArrayList<Film> result2 = new ArrayList<>(temp);
 
-		
+		result2.sort(Comparator.comparingInt(e -> (e.getRevenue() - e.getCost())));
+
+		for(int i=5; i< result2.size(); ++i){
+			result2.remove(i);
+			--i;
+		}
+
+		Assertions.assertTrue(result2.containsAll(result));
+
 
 		System.out.println(result.toString());
+		System.out.println(result2.toString());
 	}
 
 	@Test
@@ -180,6 +190,23 @@ class FilmRepoTest {
 		// TODO Auto-generated method stub
 		List<Film> result = filmRepo.top5HighMarginFilmsIn1990to2000();
 		System.out.println(result.toString());
+		List<Film> temp= filmRepo.getAll();
+		ArrayList<Film> result2 = new ArrayList<>(temp);
+
+		result2.sort(Comparator.comparingInt(e -> (e.getRevenue() - e.getCost())));
+
+		result2.removeIf(film -> film.getYear() < 1990 || film.getYear() > 2000);
+
+		for(int i=5; i< result2.size(); ++i){
+			result2.remove(i);
+			--i;
+		}
+
+		Assertions.assertTrue(result2.containsAll(result));
+
+
+		System.out.println(result.toString());
+		System.out.println(result2.toString());
 	}
 
 	@Test
